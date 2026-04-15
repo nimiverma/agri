@@ -115,6 +115,7 @@ function App() {
             {/* Language Dropdown */}
             <select
               className="lang-select notranslate"
+              translate="no"
               value={preferredLang}
               onChange={(e) => {
                 const lang = e.target.value;
@@ -128,6 +129,7 @@ function App() {
                 }
               }}
             >
+              <option value="">Select Language</option>
               <option value="en">🌍 English</option>
               <option value="hi">🇮🇳 हिंदी (Hindi)</option>
               <option value="mr">🇮🇳 मराठी (Marathi)</option>
