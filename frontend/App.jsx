@@ -18,28 +18,26 @@ import {
 } from "react-icons/fa";
 
 function App() {
+  const [loginLang, setLoginLang] = useState("");
   const [showAlert, setShowAlert] = useState(true);
   const [isMuted, setIsMuted] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
   const [name, setName] = useState(localStorage.getItem("farmerName") || "");
   const [inputName, setInputName] = useState("");
   const [preferredLang, setPreferredLang] = useState(
-    localStorage.getItem("preferredLanguage") || "en"
+    localStorage.getItem("preferredLanguage") || ""
   );
   const videoRef = useRef(null);
 
   // Auto-apply preferred language using Google Translate
   useEffect(() => {
-    if (preferredLang) {
-      const interval = setInterval(() => {
-        const select = document.querySelector(".goog-te-combo");
-        if (select) {
-          select.value = preferredLang;
-          select.dispatchEvent(new Event("change"));
-          clearInterval(interval);
-        }
-      }, 500);
-    }
+  if (!preferredLang) return;
+
+  const select = document.querySelector(".goog-te-combo");
+  if (select && select.value !== preferredLang) {
+    select.value = preferredLang;
+    select.dispatchEvent(new Event("change"));
+  }
   }, [preferredLang]);
 
   const handleMuteToggle = () => {
@@ -51,13 +49,24 @@ function App() {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    if (inputName.trim() && preferredLang) {
+
+    if (!inputName.trim()) {
+    alert("Name is required");
+    return;
+  }
+
+  if (!loginLang) {
+    alert("Please select a language");
+    return;
+  }
       localStorage.setItem("farmerName", inputName);
-      localStorage.setItem("preferredLanguage", preferredLang);
+      localStorage.setItem("preferredLanguage", loginLang);
+
       setName(inputName);
+      setPreferredLang(loginLang);
+
       setInputName("");
       window.location.href = "/";
-    }
   };
 
   const handleLogout = () => {
@@ -72,7 +81,7 @@ function App() {
     <Router>
       <div className="app">
         {/* Google Translate Widget */}
-       <GoogleTranslate lang={preferredLang} />
+        {preferredLang && <GoogleTranslate lang={preferredLang} />}
 
 
         {/* Navbar */}
@@ -105,7 +114,7 @@ function App() {
           <div className="nav-right">
             {/* Language Dropdown */}
             <select
-              className="lang-select"
+              className="lang-select notranslate"
               value={preferredLang}
               onChange={(e) => {
                 const lang = e.target.value;
@@ -177,19 +186,20 @@ function App() {
                 <div className="login-card">
                   <h2>👨‍🌾 Farmer Login</h2>
                   <p>Welcome! Please provide your details to continue.</p>
-                  <form onSubmit={handleLogin}>
+                  <form onSubmit={handleLogin} noValidate>
                     <input
                       type="text"
                       placeholder="Enter your name"
                       value={inputName}
                       onChange={(e) => setInputName(e.target.value)}
-                      required
                     />
                     <select
-                      value={preferredLang}
-                      onChange={(e) => setPreferredLang(e.target.value)}
-                      required
+                      className="notranslate"
+                      translate="no"
+                      value={loginLang}
+                      onChange={(e) => setLoginLang(e.target.value)}
                     >
+                      <option value="">Select Language</option>
                       <option value="en">🌍 English</option>
                       <option value="hi">🇮🇳 हिंदी (Hindi)</option>
                       <option value="mr">🇮🇳 मराठी (Marathi)</option>
