@@ -33,12 +33,27 @@ function App() {
   useEffect(() => {
   if (!preferredLang) return;
 
-  const select = document.querySelector(".goog-te-combo");
-  if (select && select.value !== preferredLang) {
-    select.value = preferredLang;
-    select.dispatchEvent(new Event("change"));
-  }
-  }, [preferredLang]);
+  const applyLang = () => {
+    const select = document.querySelector(".goog-te-combo");
+    if (!select) return false;
+
+    if (select.value !== preferredLang) {
+      select.value = preferredLang;
+      select.dispatchEvent(new Event("change"));
+    }
+    return true;
+  };
+
+  if (applyLang()) return;
+
+  const observer = new MutationObserver(() => {
+    if (applyLang()) observer.disconnect();
+  });
+
+  observer.observe(document.body, { childList: true, subtree: true });
+
+  return () => observer.disconnect();
+}, [preferredLang]);
 
   const handleMuteToggle = () => {
     if (videoRef.current) {
@@ -81,7 +96,7 @@ function App() {
     <Router>
       <div className="app">
         {/* Google Translate Widget */}
-        {preferredLang && <GoogleTranslate lang={preferredLang} />}
+        <GoogleTranslate lang={preferredLang} />
 
 
         {/* Navbar */}
