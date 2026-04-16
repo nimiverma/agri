@@ -17,70 +17,75 @@ function App() {
   const [loginLang, setLoginLang] = useState("");
   const [showAlert, setShowAlert] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
-  const [sunlight, setSunlight] = useState(false); 
+  const [sunlight, setSunlight] = useState(false);
 
   const [name, setName] = useState(localStorage.getItem("farmerName") || "");
   const [inputName, setInputName] = useState("");
   const [preferredLang, setPreferredLang] = useState(
-    localStorage.getItem("preferredLanguage") || ""
+    localStorage.getItem("preferredLanguage") || "",
   );
 
   // Auto-apply preferred language using Google Translate
   useEffect(() => {
-  if (!preferredLang) return;
+    if (!preferredLang) return;
 
-  const applyLang = () => {
-    const select = document.querySelector(".goog-te-combo");
-    if (!select) return false;
+    const applyLang = () => {
+      const select = document.querySelector(".goog-te-combo");
+      if (!select) return false;
 
-    if (select.value !== preferredLang) {
-      select.value = preferredLang;
-      select.dispatchEvent(new Event("change"));
+      if (select.value !== preferredLang) {
+        select.value = preferredLang;
+        select.dispatchEvent(new Event("change"));
+      }
+      return true;
+    };
+
+    if (applyLang()) return;
+
+    const observer = new MutationObserver(() => {
+      if (applyLang()) observer.disconnect();
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    return () => observer.disconnect();
+  }, [preferredLang]);
+
+  const handleMuteToggle = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = !videoRef.current.muted;
+      setIsMuted(videoRef.current.muted);
     }
-    return true;
   };
-
-  if (applyLang()) return;
-
-  const observer = new MutationObserver(() => {
-    if (applyLang()) observer.disconnect();
-  });
-
-  observer.observe(document.body, { childList: true, subtree: true });
-
-  return () => observer.disconnect();
-}, [preferredLang]);
-  const videoRef = useRef(null);
-
 
   const handleLogin = (e) => {
     e.preventDefault();
 
     if (!inputName.trim()) {
-    alert("Name is required");
-    return;
-  }
+      alert("Name is required");
+      return;
+    }
 
-  if (!loginLang) {
-    alert("Please select a language");
-    return;
-  }
-      localStorage.setItem("farmerName", inputName);
-      localStorage.setItem("preferredLanguage", loginLang);
+    if (!loginLang) {
+      alert("Please select a language");
+      return;
+    }
+    localStorage.setItem("farmerName", inputName);
+    localStorage.setItem("preferredLanguage", loginLang);
 
-      setName(inputName);
-      setPreferredLang(loginLang);
+    setName(inputName);
+    setPreferredLang(loginLang);
 
-      setInputName("");
-      window.location.href = "/";
+    setInputName("");
+    window.location.href = "/";
   };
 
   const handleLogout = () => {
     localStorage.removeItem("farmerName");
     localStorage.removeItem("preferredLanguage");
     setName("");
-    setPreferredLang("en");
-    window.location.href = "/";
+    setPreferredLang("");
+    window.location.href = "/login";
   };
 
   return (
@@ -155,13 +160,11 @@ function App() {
                 <>
                   👋 Welcome, {name}!
                   <button className="logout-btn" onClick={handleLogout}>
-                    Logout
+                    Change User
                   </button>
                 </>
               ) : (
-                <Link to="/login" onClick={() => setIsOpen(false)}>
-                  Login
-                </Link>
+                <Link to="/login">Get Started</Link>
               )}
             </div>
           </div>
@@ -173,7 +176,8 @@ function App() {
 
         {showAlert && (
           <div className="alert-bar">
-            🌧️ Weather Alert: Heavy rainfall expected in parts of Maharashtra this evening.
+            🌧️ Weather Alert: Heavy rainfall expected in parts of Maharashtra
+            this evening.
             <button className="close-btn" onClick={() => setShowAlert(false)}>
               <FaTimes />
             </button>
@@ -190,8 +194,10 @@ function App() {
             element={
               <div className="login-page">
                 <div className="login-card">
-                  <h2>👨‍🌾 Farmer Login</h2>
-                  <p>Welcome! Please provide your details to continue.</p>
+                  <h2>👨‍🌾 Get Started</h2>
+                  <p>
+                    Set up your profile to get personalized farming assistance.
+                  </p>
                   <form onSubmit={handleLogin} noValidate>
                     <input
                       type="text"
@@ -221,7 +227,7 @@ function App() {
                       <option value="hi">Hindi</option>
                       <option value="mr">Marathi</option>
                     </select>
-                    <button type="submit">Login</button>
+                    <button type="submit">Continue</button>
                   </form>
                   <p className="login-note">
                     Your preferences will be saved for future visits.
