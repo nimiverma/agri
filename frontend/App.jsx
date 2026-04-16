@@ -1,3 +1,4 @@
+import GoogleTranslate from "./GoogleTranslate";
 import React, { useState, useRef, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import "./App.css";
@@ -51,13 +52,6 @@ function App() {
     return () => observer.disconnect();
   }, [preferredLang]);
 
-  const handleMuteToggle = () => {
-    if (videoRef.current) {
-      videoRef.current.muted = !videoRef.current.muted;
-      setIsMuted(videoRef.current.muted);
-    }
-  };
-
   const handleLogin = (e) => {
     e.preventDefault();
 
@@ -89,12 +83,8 @@ function App() {
   };
 
   return (
-    <Router>
-      <div className="app">
-        {/* Google Translate Widget */}
-        <GoogleTranslate lang={preferredLang} />
-
-      {}
+  <Router>
+    <GoogleTranslate lang={preferredLang} />
       <div className={sunlight ? "app sunlight" : "app"}>
         <nav className="navbar">
           <div className="nav-left">
@@ -223,9 +213,6 @@ function App() {
                       <option value="kn">🇮🇳 ಕನ್ನಡ (Kannada)</option>
                       <option value="ml">🇮🇳 മലയാളം (Malayalam)</option>
                       <option value="or">🇮🇳 ଓଡ଼ିଆ (Odia)</option>
-                      <option value="en">English</option>
-                      <option value="hi">Hindi</option>
-                      <option value="mr">Marathi</option>
                     </select>
                     <button type="submit">Continue</button>
                   </form>
