@@ -8,6 +8,10 @@ import {
   FaChartLine,
   FaPhoneAlt,
   FaQuoteLeft,
+  FaFlask,
+  FaLeaf,
+  FaLock,
+  FaGlobe,
 } from "react-icons/fa";
 import "./Home.css";
 
@@ -16,22 +20,50 @@ export default function Home() {
     {
       icon: <FaBrain />,
       title: "AI-Powered Predictions",
-      desc: "Smart crop yield predictions using advanced machine learning",
+      desc: "Smart crop yield predictions using advanced machine learning algorithms",
+      category: "Analytics",
     },
     {
       icon: <FaSun />,
       title: "Weather Insights",
-      desc: "Real-time weather forecasts tailored for farming decisions",
+      desc: "Real-time weather forecasts and custom alerts tailored for your farm",
+      category: "Monitoring",
     },
     {
       icon: <FaHandHoldingWater />,
-      title: "Irrigation Advice",
-      desc: "Smart irrigation recommendations to optimize water usage",
+      title: "Smart Irrigation",
+      desc: "Optimize water usage with AI-driven irrigation recommendations",
+      category: "Optimization",
     },
     {
       icon: <FaChartLine />,
       title: "Yield Optimization",
       desc: "Maximize your harvest with data-driven farming strategies",
+      category: "Analytics",
+    },
+    {
+      icon: <FaFlask />,
+      title: "Soil Analysis",
+      desc: "Comprehensive soil health monitoring and nutrient level analysis",
+      category: "Monitoring",
+    },
+    {
+      icon: <FaLeaf />,
+      title: "Crop Recommendations",
+      desc: "Get crop suggestions based on soil profile and regional climate",
+      category: "Recommendations",
+    },
+    {
+      icon: <FaChartLine />,
+      title: "Fertilizer Guidance",
+      desc: "Personalized fertilizer and pesticide recommendations",
+      category: "Recommendations",
+    },
+    {
+      icon: <FaLock />,
+      title: "Secure & Private",
+      desc: "Enterprise-grade security with Firebase authentication",
+      category: "Protection",
     },
   ];
 
@@ -62,7 +94,6 @@ export default function Home() {
 
   return (
     <div className="home">
-      {/* Hero Section */}
       <section className="hero-section">
         <div className="hero-bg">
           <div className="hero-pattern"></div>
@@ -111,7 +142,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Features Section */}
       <section className="features-section">
         <div className="section-header">
           <h2>Powerful Features for Modern Farming</h2>
@@ -120,6 +150,7 @@ export default function Home() {
         <div className="features-grid">
           {features.map((feature, index) => (
             <div key={index} className="feature-card">
+              <div className="feature-category">{feature.category}</div>
               <div className="feature-icon">{feature.icon}</div>
               <h3>{feature.title}</h3>
               <p>{feature.desc}</p>
@@ -128,7 +159,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* How It Works */}
       <section className="how-section">
         <div className="section-header">
           <h2>How It Works</h2>
@@ -158,7 +188,6 @@ export default function Home() {
         </Link>
       </section>
 
-      {/* Testimonials */}
       <section className="testimonials-section">
         <div className="section-header">
           <h2>What Farmers Say</h2>
@@ -183,7 +212,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CTA Section */}
       <section className="cta-section">
         <h2>Ready to Transform Your Farm?</h2>
         <p>Join thousands of farmers already benefiting from AI-powered agriculture</p>
@@ -192,7 +220,6 @@ export default function Home() {
         </Link>
       </section>
 
-      {/* Footer */}
       <footer className="home-footer">
         <div className="footer-content">
           <div className="footer-brand">
