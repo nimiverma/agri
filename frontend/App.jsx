@@ -48,18 +48,46 @@ const getInitialLanguage = () => {
 
 /* ---------------- GOOGLE TRANSLATE CONTROL ---------------- */
 
-const applyGoogleTranslate = (lang) => {
+const applyGoogleTranslate = (lang, attempt = 0) => {
   const el = document.querySelector(".goog-te-combo");
-  if (!el) return false;
+  if (!el) {
+    if (attempt < 30) {
+      setTimeout(() => applyGoogleTranslate(lang, attempt + 1), 300);
+    }
+    return false;
+  }
 
-  el.value = lang;
-  el.dispatchEvent(new Event("change"));
+  const option = Array.from(el.options).find((opt) => opt.value === lang);
+  if (option) {
+    el.value = option.value;
+    el.selectedIndex = option.index;
+  } else {
+    el.value = lang;
+  }
+
+  const event = document.createEvent("HTMLEvents");
+  event.initEvent("change", true, true);
+  el.dispatchEvent(event);
   return true;
+};
+
+const setGoogleTranslateCookie = (lang) => {
+  try {
+    const cookieValue = encodeURIComponent(`/en/${lang}`);
+    document.cookie = `googtrans=${cookieValue}; path=/;`;
+    const hostname = window.location.hostname;
+    if (hostname) {
+      document.cookie = `googtrans=${cookieValue}; domain=.${hostname}; path=/;`;
+    }
+  } catch {
+    // Ignore if cookies are blocked
+  }
 };
 
 const syncLanguage = (lang, setLang) => {
   setLang(lang);
   localStorage.setItem("preferredLanguage", lang);
+  setGoogleTranslateCookie(lang);
   applyGoogleTranslate(lang);
 };
 
@@ -85,6 +113,19 @@ function App() {
     );
     localStorage.setItem("theme", theme);
   }, [theme]);
+
+  /* ---------------- LANGUAGE AUTO APPLY ---------------- */
+  useEffect(() => {
+    setGoogleTranslateCookie(preferredLang);
+
+    if (applyGoogleTranslate(preferredLang)) return;
+
+    const id = setInterval(() => {
+      if (applyGoogleTranslate(preferredLang)) clearInterval(id);
+    }, 300);
+
+    return () => clearInterval(id);
+  }, [preferredLang]);
 
   /* ---------------- TRANSLATION TOOLBAR DETECTION ---------------- */
   // Detects when Chrome's translation toolbar is present and adjusts layout accordingly
@@ -320,7 +361,12 @@ function App() {
                       className="notranslate"
                       translate="no"
                       value={loginLang}
-                      onChange={(e) => setLoginLang(e.target.value)}
+                      onChange={(e) => {
+                        const lang = e.target.value;
+                        setLoginLang(lang);
+                        setPreferredLang(lang);
+                        syncLanguage(lang, setPreferredLang);
+                      }}
                     >
                       <option value="">Select Language</option>
                       <option value="en">🌍 English</option>
