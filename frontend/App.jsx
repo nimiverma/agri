@@ -1,5 +1,4 @@
-import GoogleTranslate from "./GoogleTranslate";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 import Advisor from "./Advisor";
@@ -67,47 +66,10 @@ const syncLanguage = (lang, setLang) => {
 /* ---------------- APP ---------------- */
 
 function App() {
-<<<<<<< HEAD
   const [loginLang, setLoginLang] = useState("");
   const [showAlert, setShowAlert] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
-  const [sunlight, setSunlight] = useState(false);
-
-  const [name, setName] = useState(localStorage.getItem("farmerName") || "");
-  const [inputName, setInputName] = useState("");
-  const [preferredLang, setPreferredLang] = useState(
-    localStorage.getItem("preferredLanguage") || "",
-  );
-
-  // Auto-apply preferred language using Google Translate
-  useEffect(() => {
-    if (!preferredLang) return;
-
-    const applyLang = () => {
-      const select = document.querySelector(".goog-te-combo");
-      if (!select) return false;
-
-      if (select.value !== preferredLang) {
-        select.value = preferredLang;
-        select.dispatchEvent(new Event("change"));
-      }
-      return true;
-    };
-
-    if (applyLang()) return;
-
-    const observer = new MutationObserver(() => {
-      if (applyLang()) observer.disconnect();
-    });
-
-    observer.observe(document.body, { childList: true, subtree: true });
-
-    return () => observer.disconnect();
-  }, [preferredLang]);
-=======
   const [preferredLang, setPreferredLang] = useState(getInitialLanguage);
-  const [isOpen, setIsOpen] = useState(false);
-
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem("theme") || "light";
   });
@@ -123,7 +85,6 @@ function App() {
     );
     localStorage.setItem("theme", theme);
   }, [theme]);
->>>>>>> upstream/main
 
   /* ---------------- LANGUAGE AUTO APPLY ---------------- */
   useEffect(() => {
@@ -145,7 +106,6 @@ function App() {
       return;
     }
 
-<<<<<<< HEAD
     if (!loginLang) {
       alert("Please select a language");
       return;
@@ -155,11 +115,6 @@ function App() {
 
     setName(inputName);
     setPreferredLang(loginLang);
-
-=======
-    localStorage.setItem("farmerName", inputName);
-    setName(inputName);
->>>>>>> upstream/main
     setInputName("");
     window.location.href = "/";
   };
@@ -167,12 +122,8 @@ function App() {
   const handleLogout = () => {
     localStorage.removeItem("farmerName");
     setName("");
-<<<<<<< HEAD
     setPreferredLang("");
     window.location.href = "/login";
-=======
-    window.location.href = "/";
->>>>>>> upstream/main
   };
 
   const handleThemeToggle = () => {
@@ -182,16 +133,10 @@ function App() {
   /* ---------------- UI ---------------- */
 
   return (
-<<<<<<< HEAD
-  <Router>
-    <GoogleTranslate lang={preferredLang} />
-      <div className={sunlight ? "app sunlight" : "app"}>
-=======
     <Router>
       <div className={`app ${theme === "dark" ? "theme-dark" : ""}`}>
 
         {/* NAVBAR */}
->>>>>>> upstream/main
         <nav className="navbar">
           <div className="nav-left">
             <FaLeaf className="icon" />
@@ -230,49 +175,26 @@ function App() {
 
             <select
               className="lang-select notranslate"
-<<<<<<< HEAD
               translate="no"
-=======
->>>>>>> upstream/main
               value={preferredLang}
               onChange={(e) =>
                 syncLanguage(e.target.value, setPreferredLang)
               }
             >
-<<<<<<< HEAD
-              <option value="">Select Language</option>
-              <option value="en">🌍 English</option>
-              <option value="hi">🇮🇳 हिंदी</option>
-              <option value="mr">🇮🇳 मराठी</option>
-              <option value="bn">🇮🇳 বাংলা</option>
-              <option value="ta">🇮🇳 தமிழ்</option>
-              <option value="te">🇮🇳 తెలుగు</option>
-              <option value="gu">🇮🇳 ગુજરાતી</option>
-              <option value="pa">🇮🇳 ਪੰਜਾਬੀ</option>
-              <option value="kn">🇮🇳 ಕನ್ನಡ</option>
-              <option value="ml">🇮🇳 മലയാളം</option>
-              <option value="or">🇮🇳 ଓଡ଼ିଆ</option>
-=======
               {LANGUAGE_OPTIONS.map((l) => (
                 <option key={l.value} value={l.value}>
                   {l.label}
                 </option>
               ))}
->>>>>>> upstream/main
             </select>
 
             <div className="nav-user">
               {name ? (
                 <>
-<<<<<<< HEAD
                   👋 Welcome, {name}!
                   <button className="logout-btn" onClick={handleLogout}>
                     Change User
                   </button>
-=======
-                  👋 {name}
-                  <button onClick={handleLogout}>Change User</button>
->>>>>>> upstream/main
                 </>
               ) : (
                 <Link to="/login">Get Started</Link>
@@ -288,7 +210,6 @@ function App() {
           </button>
         </nav>
 
-<<<<<<< HEAD
         {showAlert && (
           <div className="alert-bar">
             🌧️ Weather Alert: Heavy rainfall expected in parts of Maharashtra
@@ -299,9 +220,7 @@ function App() {
           </div>
         )}
 
-=======
         {/* ROUTES */}
->>>>>>> upstream/main
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/advisor" element={<Advisor />} />
@@ -312,24 +231,17 @@ function App() {
             element={
               <div className="login-page">
                 <div className="login-card">
-<<<<<<< HEAD
                   <h2>👨‍🌾 Get Started</h2>
                   <p>
                     Set up your profile to get personalized farming assistance.
                   </p>
                   <form onSubmit={handleLogin} noValidate>
-=======
-                  <h2>👨‍🌾 Farmer Login</h2>
-
-                  <form onSubmit={handleLogin}>
->>>>>>> upstream/main
                     <input
                       type="text"
                       placeholder="Enter your name"
                       value={inputName}
                       onChange={(e) => setInputName(e.target.value)}
                     />
-<<<<<<< HEAD
                     <select
                       className="notranslate"
                       translate="no"
@@ -350,10 +262,6 @@ function App() {
                       <option value="or">🇮🇳 ଓଡ଼ିଆ (Odia)</option>
                     </select>
                     <button type="submit">Continue</button>
-=======
-
-                    <button type="submit">Login</button>
->>>>>>> upstream/main
                   </form>
                 </div>
               </div>
