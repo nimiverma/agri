@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
-import GoogleTranslate from "./GoogleTranslate";
 import Advisor from "./Advisor";
 import Home from "./Home";
 import How from "./How";
@@ -45,6 +44,8 @@ const getInitialLanguage = () => {
   }
 };
 
+/* ---------------- GOOGLE TRANSLATE CONTROL ---------------- */
+
 const applyGoogleTranslate = (lang) => {
   const el = document.querySelector(".goog-te-combo");
   if (!el) return false;
@@ -69,8 +70,6 @@ function App() {
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem("theme") || "light";
   });
-
-  const [themeAnimNonce, setThemeAnimNonce] = useState(0);
 
   const [name, setName] = useState(localStorage.getItem("farmerName") || "");
   const [inputName, setInputName] = useState("");
@@ -118,7 +117,6 @@ function App() {
 
   const handleThemeToggle = () => {
     setTheme((t) => (t === "dark" ? "light" : "dark"));
-    setThemeAnimNonce((n) => n + 1);
   };
 
   /* ---------------- UI ---------------- */
@@ -126,8 +124,6 @@ function App() {
   return (
     <Router>
       <div className={`app ${theme === "dark" ? "theme-dark" : ""}`}>
-
-        <GoogleTranslate lang={preferredLang} />
 
         {/* NAVBAR */}
         <nav className="navbar">
