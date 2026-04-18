@@ -156,21 +156,12 @@ function App() {
               <Link to="/how-it-works" onClick={() => setIsOpen(false)}>
                 <FaInfoCircle /> How It Works
               </Link>
-            </li>
+</li>
             <li>
-              <Link to="/crop-guide" onClick={() => setIsOpen(false)}>
-                <FaLeaf className="icon" /> Crop Guide
-              </Link>
-            </li>
-            <li>
-              <Link to="/crop-guide" onClick={() => setIsOpen(false)}>
-                <FaLeaf className="icon" /> Crop Guide
-              </Link>
-            </li>
-      <Link to="/resources" onClick={() => setIsOpen(false)}>
+              <Link to="/resources" onClick={() => setIsOpen(false)}>
                 Resources
-      </Link>
-      </li>
+              </Link>
+            </li>
           </ul>
 
           <div className="nav-right">
