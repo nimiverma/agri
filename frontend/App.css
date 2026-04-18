@@ -20,6 +20,19 @@ body,
   font-family: "Poppins", sans-serif;
 }
 
+/* Translation Toolbar Adjustment */
+.has-translation-toolbar .app {
+  padding-top: 40px; /* Adjust for Chrome's translation toolbar height */
+}
+
+.has-translation-toolbar .navbar {
+  top: 40px; /* Push navbar down to account for toolbar */
+}
+
+.has-translation-toolbar .hero-section {
+  padding-top: 140px; /* Adjust hero padding (100px original + 40px toolbar) */
+}
+
 
 .navbar {
   display: flex;
@@ -188,13 +201,13 @@ body,
   right: 20px;
   top: 50%;
   transform: translateY(-50%);
-  
+
   font-size: 26px;
   background: none;
   border: none;
   color: white;
   cursor: pointer;
-  z-index: 1100; 
+  z-index: 1100;
 }
 
 @media (max-width: 768px) {
