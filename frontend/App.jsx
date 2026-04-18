@@ -1,6 +1,5 @@
 import GoogleTranslate from "./GoogleTranslate";
 import React, { useState, useRef, useEffect } from "react";
-import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 import Advisor from "./Advisor";
